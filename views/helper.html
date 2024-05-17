@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helper Page</title>
+</head>
+<body>
+    <h1>Helper Page</h1>
+
+    <!-- Display Current Question -->
+    <div id="questionContainer">
+        <h2>Current Question:</h2>
+        <p id="questionText"></p>
+    </div>
+    <button id="fetchQuestionBtn">Fetch Latest Question</button>
+    <!-- Form to Submit Answer -->
+    <!-- <form id="answerForm">
+        <label for="answerInput">Your Answer:</label>
+        <input type="text" id="answerInput" required>
+        <button type="submit">Submit Answer</button>
+    </form> -->
+    <br>
+    <br><hr>
+    <form id="answerForm">
+        <label>Your Answer:</label><br>
+        <input type="radio" id="cyberbullying" name="answer" value="Cyberbullying" required>
+        <label for="cyberbullying">Cyberbullying</label><br>
+        <input type="radio" id="notCyberbullying" name="answer" value="Not Cyberbullying" required>
+        <label for="notCyberbullying">Not Cyberbullying</label><br>
+        <br><br>
+        <button type="submit">Submit Answer</button>
+    </form>
+
+    <!-- Button to Fetch Latest Question -->
+ 
+
+    <script>
+        // Function to fetch the latest question
+        async function fetchLatestQuestion() {
+            const response = await fetch('https://cyberbullying-mg99.onrender.com/question');
+            const data = await response.json();
+            console.log(data);
+            if (data.question) {
+                document.getElementById('questionText').textContent = data.question;
+            } else {
+                document.getElementById('questionText').textContent = 'No question available';
+            }
+        }
+
+        // Function to submit an answer old
+        // async function submitAnswer(event) {
+        //     event.preventDefault();
+
+        //     const answer = document.getElementById('answerInput').value;
+
+        //     const response = await fetch('https://cyberbullying-mg99.onrender.com/answer', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({ answer })
+        //     });
+
+        //     if (response.ok) {
+        //         alert('Answer submitted successfully');
+        //         document.getElementById('answerInput').value = ''; // Clear input field
+        //     } else {
+        //         alert('Failed to submit answer');
+        //     }
+        // }
+
+        //****** SUBMIT ANSER NEW CODE
+        // Function to submit an answer
+async function submitAnswer(event) {
+    event.preventDefault();
+
+    const answerElement = document.querySelector('input[name="answer"]:checked');
+    if (!answerElement) {
+        alert('Please select an answer.');
+        return;
+    }
+
+    const answer = answerElement.value;
+
+    const response = await fetch('https://cyberbullying-mg99.onrender.com/answer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ answer })
+    });
+
+    if (response.ok) {
+        alert('Answer submitted successfully');
+        // Clear radio button selection
+        document.getElementById('cyberbullying').checked = false;
+        document.getElementById('notCyberbullying').checked = false;
+    } else {
+        alert('Failed to submit answer');
+    }
+}
+
+
+        // Fetch the initial question when the page loads
+        window.onload = function() {
+            fetchLatestQuestion();
+        };
+
+        // Attach submit event listener to answer form
+        document.getElementById('answerForm').addEventListener('submit', submitAnswer);
+
+        // Attach click event listener to fetch question button
+        document.getElementById('fetchQuestionBtn').addEventListener('click', fetchLatestQuestion);
+
+
+
+    </script>
+</body>
+</html>

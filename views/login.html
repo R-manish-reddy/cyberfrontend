@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login - CyberBullying Detection App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="styles.css"> Link to your custom CSS file -->
+    <style>
+        body {
+    background-image: url('./cyber.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Roboto', sans-serif; /* Use Roboto font */
+}
+
+.login-container {
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    padding: 30px;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login-container h2 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #3b82f6; /* Blue color for heading */
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-container label {
+    text-align: left;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.login-container button {
+    background-color: #3b82f6;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-container button:hover {
+    background-color: #2563eb;
+}
+
+.signup-link {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <h2>CyberBullying Detection App</h2> <!-- App name -->
+        <form id="loginForm">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+            <button type="submit">Login</button>
+        </form>
+        <p class="signup-link">New to this app? <a href="/signup" style="color: #3b82f6; text-decoration: none;">Sign up here</a></p>
+    </div>
+
+    <!-- JavaScript for Form Submission -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $('#loginForm').on('submit', function (event) {
+            event.preventDefault();
+            const email = $('#email').val().trim();
+            const password = $('#password').val().trim();
+
+            $.ajax({
+                url: '/login',
+                method: 'POST',
+                data: { email, password }
+            })
+            .done(function (data) {
+                window.location.href = '/detect';
+            })
+            .fail(function (error) {
+                window.location.href = '/signup';
+            });
+        });
+    </script>
+
+</body>
+
+</html>

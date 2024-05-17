@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Reset default margin and padding */
+body, h1, h2, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f4f6; /* Equivalent to bg-gray-100 */
+    overflow-x: hidden; /* Prevent horizontal scrollbar */
+}
+
+.container {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+
+header {
+    background-color: #1d4ed8; /* Equivalent to bg-blue-500 */
+    color: #ffffff; /* Equivalent to text-white */
+    padding: 20px 0;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 2rem; /* Equivalent to text-2xl */
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+nav a {
+    color: #ffffff; /* Equivalent to text-white */
+    text-decoration: none;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.hero {
+    background-image: url('./cyber.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff; /* Equivalent to text-white */
+    text-align: center;
+}
+
+.hero h2 {
+    font-size: 2.5rem; /* Equivalent to text-3xl */
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.25rem; /* Equivalent to text-lg */
+    margin-bottom: 1.5rem;
+}
+
+a.button {
+    display: inline-block;
+    background-color: #1d4ed8; /* Equivalent to bg-blue-500 */
+    color: #ffffff; /* Equivalent to text-white */
+    font-weight: bold;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+a.button:hover {
+    background-color: #2563eb; /* Equivalent to hover:bg-blue-600 */
+}
+
+footer {
+    background-color: #1f2937; /* Equivalent to bg-gray-800 */
+    color: #ffffff; /* Equivalent to text-white */
+    text-align: center;
+    padding: 20px 0;
+}
+body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6; /* Equivalent to bg-gray-100 */
+            overflow-x: hidden; /* Prevent horizontal scrollbar */
+        }
+        .container-profile {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        #profileImage {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+    </style>
+    <title>Profile - User</title>
+</head>
+
+<body>
+  
+
+    <!-- Content Section -->
+    <a href="/logout">Logout</a>
+    <a href="/detect">Detect</a>
+    <div class="container-profile">
+        <p id="username"></p>
+        <img id="profileImage" src="#default_image" alt="Default Image for now" />
+        <p id="name"></p>
+        <p id="email"></p>
+    </div>
+
+    <!-- Include Footer -->
+    
+
+    <!-- JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $.ajax({
+                url: '/user',
+                method: 'GET'
+            })
+            .then(function (user) {
+                console.log('User: ', user);
+                $('#username').html(`Username: ${user.username}`);
+                $('#email').html(`Email: ${user.email}`);
+                $('#profileImage').attr('src', user.profileImage ? user.profileImage :
+                    'https://www.law.berkeley.edu/wp-content/uploads/2015/04/Blank-profile.png');
+            })
+            .catch(function () {
+                console.error('Error fetching user data');
+            });
+    </script>
+</body>
+
+</html>

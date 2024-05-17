@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberBullying Detection based on Emotion</title>
+  <style>
+    /* Reset default margin and padding */
+body, h1, h2, p, ul, li, label, input, button {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif; /* Apply default font */
+}
+
+/* Global styles */
+body {
+    background-color: #f3f4f6; /* Equivalent to bg-gray-100 */
+    overflow-x: hidden; /* Prevent horizontal scrollbar */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+header {
+    background-color: #1d4ed8; /* Equivalent to bg-blue-500 */
+    color: #ffffff; /* Equivalent to text-white */
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2rem; /* Equivalent to text-2xl */
+    font-weight: bold;
+}
+
+form {
+    margin: 20px auto;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+form input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #1d4ed8; /* Equivalent to bg-blue-500 */
+    color: #ffffff; /* Equivalent to text-white */
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #2563eb; /* Equivalent to hover:bg-blue-600 */
+}
+
+#answerContainer {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#answerContainer h2 {
+    font-size: 1.5rem; /* Equivalent to text-lg */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+footer {
+    background-color: #1f2937; /* Equivalent to bg-gray-800 */
+    color: #ffffff; /* Equivalent to text-white */
+    text-align: center;
+    padding: 20px 0;
+}
+
+footer p {
+    margin: 0;
+}
+body {
+    background-image: url('cyber.jpg');
+    background-size: cover; /* Cover the entire viewport */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Prevent image from repeating */
+}
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px;
+}
+
+.logout-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: white;
+    color: blue;
+    text-decoration: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logout-link:hover {
+    background-color: #f0f0f0;
+}
+
+
+  </style>
+</head>
+<body >
+    
+    <header class="header-container">
+        <h1>CyberBullying Detection</h1>
+        <a href="/logout" class="logout-link">Logout</a>
+    </header>
+    
+
+    <section class="hero" >
+
+    <form id="postQuestionForm" style="margin-top: 200px;">
+        <label for="questionInput">Enter Text to Detect CyberBullying</label>
+        <input type="text" id="questionInput" required>
+        <button type="submit" style="margin-top: 30px;">Detect</button>
+    </form>
+
+    <div id="answerContainer">
+        <h2>Current Input:</h2>
+        <p id="currIp" style="margin-top: 10px;">--</p>
+        <h2 style="margin-top: 10px;">Result :</h2>
+        <p id="answerText" style="font-weight: bolder;font-size: larger;" >--</p>
+    </div>
+</section>
+<script>
+    let isQuestionPosted = false; // Flag to track if a question has been posted
+
+    // Function to fetch the current answer
+    async function fetchAnswer() {
+        if (isQuestionPosted) {
+            const response = await fetch('https://cyberbullying-mg99.onrender.com/question');
+            const data = await response.json();
+            console.log(data);
+            if (data.answer) {
+                document.getElementById('answerText').textContent = data.answer;
+                
+                // Check if the answer is "cyberbullying"
+                const answerText = data.answer.toLowerCase();
+                const resultText = document.getElementById('answerText');
+                
+                if (answerText==='cyberbullying') { 
+                    resultText.style.color = 'red'; // Set text color to red
+                } else {
+                    resultText.style.color = 'green'; // Set text color to green
+                }
+
+                isQuestionPosted = false; // Reset the flag once answer is available
+            }
+        }
+    }
+
+    // Function to post a new question
+    async function postQuestion(event) {
+
+        document.getElementById('answerText').textContent = "---";
+
+        event.preventDefault();
+
+        const newQuestion = document.getElementById('questionInput').value;
+        document.getElementById('currIp').textContent = newQuestion;
+        const response = await fetch('https://cyberbullying-mg99.onrender.com/question', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ newQuestion })
+        });
+
+        if (response.ok) {
+            // alert('Question posted successfully');
+            document.getElementById('questionInput').value = ''; // Clear input field
+            isQuestionPosted = true; // Set the flag to start fetching the answer
+        } else {
+            alert('Failed to post question');
+        }
+    }
+
+    // Fetch the initial answer when the page loads
+    window.onload = function() {
+        fetchAnswer(); // Fetch answer initially
+        setInterval(fetchAnswer, 5000); // Fetch answer every 5 seconds (5000 milliseconds)
+    };
+
+    // Attach submit event listener to question form
+    document.getElementById('postQuestionForm').addEventListener('submit', postQuestion);
+</script>
+
+
+    
+</body>
+
+</html>
